@@ -1,3 +1,4 @@
+const compression = require('compression');
 const express = require('express');
 const { default: helmet } = require('helmet');
 const morgan = require('morgan');
@@ -9,13 +10,14 @@ app.use(helmet())
 app.use(compression())
 
 // init db
-app.get('/', (req, res) => {
-    const hello = "hello123"
+require('./dbs/init.mongodb')
+// init routes
+app.get('/', (req, res, next) => {
     return res.status(200).json({
-        message: 'hello',
-        metadata: hello.repeat(100000)
+        message: 'hello world',
     })
-} )
+})
+
 // handling error
 
 module.exports = app
