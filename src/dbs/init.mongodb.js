@@ -46,7 +46,7 @@ class Database {
         console.log(`Connected Mongodb Success PRO`)
         countConnect()
       })
-      .catch((err) => console.log(`Error Connect!`))
+      .catch((err) => console.log(err))
   }
 
   static getInstance() {

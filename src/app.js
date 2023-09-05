@@ -9,6 +9,12 @@ const app = express()
 app.use(morgan('dev'))
 app.use(helmet())
 app.use(compression())
+app.use(express.json())
+app.use(
+  express.urlencoded({
+    extended: true
+  })
+)
 
 // init db
 require('./dbs/init.mongodb')
@@ -16,12 +22,7 @@ require('./dbs/init.mongodb')
 // checkOverload()
 
 // init routes
-app.get('/', (req, res) => {
-  return res.status(200).json({
-    message: 'hello world'
-  })
-})
-
+app.use('', require('./routes/index'))
 // handling error
 
 module.exports = app
