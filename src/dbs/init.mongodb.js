@@ -1,21 +1,21 @@
-"use strict";
+'use strict'
 
-const mongoose = require("mongoose");
-const connectString = `mongodb://localhost:27017/shopDev`;
-const { countConnect } = require("../helpers/check.connect");
+const mongoose = require('mongoose')
+const connectString = `mongodb://localhost:27017/shopDev`
+const { countConnect } = require('../helpers/check.connect')
 
 // using singleton design pattern to create only instance
 class Database {
   constructor() {
-    this.connect();
+    this.connect()
   }
 
   // connect
-  connect(type = "mongodb") {
+  connect(type = 'mongodb') {
     // dev
     if (1 === 1) {
-      mongoose.set("debug", true);
-      mongoose.set("debug", { color: true });
+      mongoose.set('debug', true)
+      mongoose.set('debug', { color: true })
     }
 
     mongoose
@@ -23,21 +23,21 @@ class Database {
         maxPoolSize: 50
       })
       .then((_) => {
-        console.log(`Connected Mongodb Success PRO`);
-        countConnect();
+        console.log(`Connected Mongodb Success PRO`)
+        countConnect()
       })
-      .catch((err) => console.log(`Error Connect!`));
+      .catch((err) => console.log(`Error Connect!`))
   }
 
   static getInstance() {
     if (!Database.instance) {
-      Database.instance = new Database();
+      Database.instance = new Database()
     }
 
-    return Database.instance;
+    return Database.instance
   }
 }
 
-const instanceMongodb = Database.getInstance();
+const instanceMongodb = Database.getInstance()
 
-module.exports = instanceMongodb;
+module.exports = instanceMongodb
