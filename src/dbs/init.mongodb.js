@@ -6,7 +6,6 @@ const {
 } = require('../configs/config.mongodb')
 
 const connectString = `mongodb://${host}:${port}/${name}`
-console.log(connectString)
 const { countConnect } = require('../helpers/check.connect')
 
 // ** Don't use this way
@@ -43,7 +42,7 @@ class Database {
         maxPoolSize: 50
       })
       .then((_) => {
-        console.log(`Connected Mongodb Success PRO`)
+        console.log(`Connected Mongodb Success`)
         countConnect()
       })
       .catch((err) => console.log(err))
