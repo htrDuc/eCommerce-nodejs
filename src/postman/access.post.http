@@ -1,4 +1,4 @@
-@url_dev=http://localhost:3055/v1/api/
+@url_dev=http://localhost:3055/v1/api
 
 ### signup
 POST {{url_dev}}/shop/signup
@@ -7,6 +7,6 @@ x-api-key: 91f06e805c82d0f9b5310ff2ae449643fa96b821910d34d7418690ef0f84dc3ded940
 
 {
   "name": "Shop TIPS",
-  "email": "duc7@smartosc.com",
+  "email": "duc26@smartosc.com",
   "password": "abc123"
 }
