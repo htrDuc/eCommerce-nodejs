@@ -36,6 +36,7 @@ app.use((error, req, res, next) => {
   return res.status(statusCode).json({
     status: 'error',
     code: statusCode,
+    // stack: error.stack, // Turn On to debug
     message: error.message || 'Internal Server Error'
   })
 })
