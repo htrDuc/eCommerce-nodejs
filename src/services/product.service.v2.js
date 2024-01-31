@@ -2,6 +2,15 @@
 
 const { product, clothing, electronic } = require('../models/product.model')
 const { BadRequestError, AuthFailureError } = require('../core/error.response')
+const {
+  findAllDraftsForShop,
+  findAllPublishForShop,
+  publishProductForShop,
+  unpublishProductForShop,
+  searchProductsForUser,
+  findAllProducts,
+  findProduct
+} = require('../models/repositories/product.repo')
 
 // Factory pattern
 class ProductFactory {
@@ -15,6 +24,48 @@ class ProductFactory {
 
     return new productTypeClass(payload).createProduct()
   }
+
+  // PUT //
+  static async publishProductForShop({ product_shop, product_id }) {
+    return await publishProductForShop({ product_shop, product_id })
+  }
+  static async unpublishProductForShop({ product_shop, product_id }) {
+    return await unpublishProductForShop({ product_shop, product_id })
+  }
+  // END PUT //
+
+  // QUERY //
+  static async findAllDraftsForShop({ product_shop, limit = 50, skip = 0 }) {
+    const query = { product_shop, isDraft: true }
+    return await findAllDraftsForShop({ query, limit, skip })
+  }
+
+  static async findAllPublishForShop({ product_shop, limit = 50, skip = 0 }) {
+    const query = { product_shop, isPublished: true }
+    return await findAllPublishForShop({ query, limit, skip })
+  }
+
+  static async searchProductsForUser({ keySearch }) {
+    return await searchProductsForUser({ keySearch })
+  }
+
+  static async findAllProducts({ limit = 50, page = 1, sort = 'ctime', filter = { isPublished: true } }) {
+    return await findAllProducts({
+      limit,
+      page,
+      sort,
+      filter,
+      select: ['product_name', 'product_price', 'product_thumb']
+    })
+  }
+
+  static async findProduct({ product_id }) {
+    return await findProduct({
+      product_id,
+      unselect: ['__v']
+    })
+  }
+  // END QUERY //
 }
 
 class Product {
