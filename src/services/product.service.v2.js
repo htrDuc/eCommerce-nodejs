@@ -12,6 +12,7 @@ const {
   findProduct,
   updateProductById,
 } = require('../models/repositories/product.repo')
+const { removeUndefinedObject, updateNestedObjectParse } = require('../utils')
 
 // Factory pattern
 class ProductFactory {
@@ -131,15 +132,19 @@ class Clothing extends Product {
   }
 
   async updateProduct(productId) {
-    const objectParams = this
+    const objectParams = removeUndefinedObject(this)
+
     if (objectParams.product_attributes) {
       await updateProductById({
         productId,
-        payload: objectParams,
+        payload: updateNestedObjectParse(objectParams.product_attributes),
         model: clothing,
       })
     }
-    const updateProduct = await super.updateProduct(productId, objectParams)
+    const updateProduct = await super.updateProduct(
+      productId,
+      updateNestedObjectParse(objectParams),
+    )
     return updateProduct
   }
 }
