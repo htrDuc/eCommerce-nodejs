@@ -10,32 +10,32 @@ const inventorySchema = new Schema(
   {
     inven_productId: {
       type: Schema.Types.ObjectId,
-      ref: 'Product',
+      ref: 'Product'
     },
     inven_shopId: {
       type: Schema.Types.ObjectId,
-      ref: 'Shop',
+      ref: 'Shop'
     },
     inven_location: {
       type: String,
-      default: 'unKnow',
+      default: 'unKnow'
     },
     inven_stock: {
       type: Number,
-      required: true,
+      required: true
     },
     inven_reservations: {
       type: Array,
-      default: [],
-    },
+      default: []
+    }
   },
   {
     collection: COLLECTION_NAME,
-    timestamps: true,
-  },
+    timestamps: true
+  }
 )
 
 //Export the model
 module.exports = {
-  inventory: model(DOCUMENT_NAME, inventorySchema),
+  inventory: model(DOCUMENT_NAME, inventorySchema)
 }

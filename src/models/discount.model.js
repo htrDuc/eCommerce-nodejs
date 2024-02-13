@@ -26,17 +26,17 @@ const discountSchema = new Schema(
     discount_applies_to: {
       type: String,
       required: true,
-      enum: ['all', 'specific'],
+      enum: ['all', 'specific']
     }, // This discount can be applied to all products or specific product
     discount_product_ids: {
       type: Array,
-      default: [],
-    }, // List product can be applied this voucher
+      default: []
+    } // List product can be applied this voucher
   },
   {
     collection: COLLECTION_NAME,
-    timestamps: true,
-  },
+    timestamps: true
+  }
 )
 
 //Export the model
