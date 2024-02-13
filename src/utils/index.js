@@ -48,5 +48,5 @@ module.exports = {
   getSelectData,
   getUnSelectData,
   removeUndefinedObject,
-  updateNestedObjectParse,
+  updateNestedObjectParse
 }

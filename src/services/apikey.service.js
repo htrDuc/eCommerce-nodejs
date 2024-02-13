@@ -12,7 +12,7 @@ class ApiKeyService {
   static createKey = async () => {
     const newKey = await apiKeyModel.create({
       key: crypto.randomBytes(64).toString('hex'),
-      permissions: ['0000'],
+      permissions: ['0000']
     })
     return newKey
   }
