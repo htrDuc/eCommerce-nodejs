@@ -143,4 +143,5 @@ module.exports = {
   findProduct,
   updateProductById,
   checkProductByServer,
+  getProductById,
 }
