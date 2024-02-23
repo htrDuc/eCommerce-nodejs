@@ -1,6 +1,6 @@
 const { Types } = require('mongoose')
 const { product } = require('../product.model')
-const { getSelectData, getUnSelectData } = require('../../utils')
+const { getSelectData, getUnSelectData, convertToObjectIdMongodb } = require('../../utils')
 
 const searchProductsForUser = async ({ keySearch }) => {
   const regexSearch = new RegExp(keySearch)
@@ -97,6 +97,14 @@ const updateProductById = async ({ productId, payload, model, isNew = true }) =>
   })
 }
 
+const getProductById = async (productId) => {
+  return await product
+    .findOne({
+      _id: convertToObjectIdMongodb(productId)
+    })
+    .lean()
+}
+
 module.exports = {
   findAllDraftsForShop,
   findAllPublishForShop,
@@ -105,5 +113,6 @@ module.exports = {
   searchProductsForUser,
   findAllProducts,
   findProduct,
-  updateProductById
+  updateProductById,
+  getProductById
 }
