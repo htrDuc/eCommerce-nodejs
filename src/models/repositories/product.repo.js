@@ -1,10 +1,6 @@
 const { Types } = require('mongoose')
 const { product } = require('../product.model')
-const {
-  getSelectData,
-  getUnSelectData,
-  convertToObjectIdMongodb,
-} = require('../../utils')
+const { getSelectData, getUnSelectData, convertToObjectIdMongodb } = require('../../utils')
 
 const searchProductsForUser = async ({ keySearch }) => {
   const regexSearch = new RegExp(keySearch)
@@ -13,15 +9,15 @@ const searchProductsForUser = async ({ keySearch }) => {
       {
         isPublished: true,
         $text: {
-          $search: regexSearch,
-        },
+          $search: regexSearch
+        }
       },
       {
-        score: { $meta: 'textScore' },
-      },
+        score: { $meta: 'textScore' }
+      }
     )
     .sort({
-      score: { $meta: 'textScore' },
+      score: { $meta: 'textScore' }
     })
     .lean()
   return results
@@ -38,19 +34,19 @@ const findAllPublishForShop = async ({ query, limit, skip }) => {
 const publishProductForShop = async ({ product_shop, product_id }) => {
   const foundShop = await product.findOne({
     product_shop: new Types.ObjectId(product_shop),
-    _id: new Types.ObjectId(product_id),
+    _id: new Types.ObjectId(product_id)
   })
 
   if (!foundShop) return null
 
   const { modifiedCount } = await product.updateOne(
     {
-      _id: new Types.ObjectId(product_id),
+      _id: new Types.ObjectId(product_id)
     },
     {
       isDraft: false,
-      isPublished: true,
-    },
+      isPublished: true
+    }
   )
   return modifiedCount
 }
@@ -58,18 +54,18 @@ const publishProductForShop = async ({ product_shop, product_id }) => {
 const unpublishProductForShop = async ({ product_shop, product_id }) => {
   const foundShop = await product.findOne({
     product_shop: new Types.ObjectId(product_shop),
-    _id: new Types.ObjectId(product_id),
+    _id: new Types.ObjectId(product_id)
   })
 
   if (!foundShop) return null
   const { modifiedCount } = await product.updateOne(
     {
-      _id: new Types.ObjectId(product_id),
+      _id: new Types.ObjectId(product_id)
     },
     {
       isDraft: true,
-      isPublished: false,
-    },
+      isPublished: false
+    }
   )
   return modifiedCount
 }
@@ -88,34 +84,21 @@ const queryProduct = async ({ query, limit, skip }) => {
 const findAllProducts = async ({ limit, page, sort, filter, select }) => {
   const skip = (page - 1) * limit
   const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
-  return await product
-    .find(filter)
-    .sort(sortBy)
-    .limit(limit)
-    .skip(skip)
-    .select(getSelectData(select))
-    .lean()
+  return await product.find(filter).sort(sortBy).limit(limit).skip(skip).select(getSelectData(select)).lean()
 }
 
 const findProduct = async ({ product_id, unselect }) => {
   return await product.findById(product_id).select(getUnSelectData(unselect))
 }
 
-const updateProductById = async ({
-  productId,
-  payload,
-  model,
-  isNew = true,
-}) => {
+const updateProductById = async ({ productId, payload, model, isNew = true }) => {
   return await model.findByIdAndUpdate(productId, payload, {
-    new: isNew,
+    new: isNew
   })
 }
 
 const getProductById = async (productId) => {
-  return await product
-    .findOne({ _id: convertToObjectIdMongodb(productId) })
-    .lean()
+  return await product.findOne({ _id: convertToObjectIdMongodb(productId) }).lean()
 }
 
 const checkProductByServer = async (products) => {
@@ -125,11 +108,11 @@ const checkProductByServer = async (products) => {
       if (foundProduct) {
         return {
           price: foundProduct.product_price,
-          quantity: productId.quantity,
-          productId: productId.productId,
+          quantity: product.quantity,
+          productId: product.productId
         }
       }
-    }),
+    })
   )
 }
 
@@ -143,5 +126,5 @@ module.exports = {
   findProduct,
   updateProductById,
   checkProductByServer,
-  getProductById,
+  getProductById
 }

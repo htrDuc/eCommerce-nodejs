@@ -3,12 +3,11 @@
   "version": "1.0.0",
   "description": "ecommerce",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node --watch server.js",
     "lint": "eslint --ignore-path .eslintignore \"src/**/*.js\" --fix",
     "lint:check": "eslint --ignore-path .eslintignore \"src/**/*.js\"",
     "prettier": "prettier --write \"src/**/*.js\"",
-    "prettier:check": "prettier --check \"src/**/*.js\"",
+    "prettier:check": "prettier --check \"src/**/*.js\""
   },
   "keywords": [],
   "author": "",

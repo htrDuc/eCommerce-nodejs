@@ -10,7 +10,8 @@ const {
   searchProductsForUser,
   findAllProducts,
   findProduct,
-  updateProductById
+  updateProductById,
+  getProductById
 } = require('../models/repositories/product.repo')
 const { removeUndefinedObject, updateNestedObjectParse } = require('../utils')
 const { insertInventory } = require('../models/repositories/inventory.repo')
@@ -135,15 +136,21 @@ class Clothing extends Product {
   }
 
   async updateProduct(productId) {
-    const objectParams = removeUndefinedObject(this)
-
-    if (objectParams.product_attributes) {
-      await updateProductById({
-        productId,
-        payload: updateNestedObjectParse(objectParams.product_attributes),
-        model: clothing
-      })
+    const foundProduct = await getProductById(productId)
+    if (!foundProduct) throw new BadRequestError('Can not find product')
+    if (this.product_shop !== foundProduct.product_shop.toString()) {
+      throw new BadRequestError('You are not owner of this product')
     }
+
+    const objectParams = removeUndefinedObject(this)
+    if (this.product_shop)
+      if (objectParams.product_attributes) {
+        await updateProductById({
+          productId,
+          payload: updateNestedObjectParse(objectParams.product_attributes),
+          model: clothing
+        })
+      }
     const updateProduct = await super.updateProduct(productId, updateNestedObjectParse(objectParams))
     return updateProduct
   }
@@ -163,6 +170,11 @@ class Electronic extends Product {
   }
 
   async updateProduct(productId) {
+    const foundProduct = await getProductById(productId)
+    if (!foundProduct) throw new BadRequestError('Can not find product')
+    if (this.product_shop !== foundProduct.product_shop.toString()) {
+      throw new BadRequestError('You are not owner of this product')
+    }
     const objectParams = this
     console.log(objectParams)
     if (objectParams.product_attributes) {
