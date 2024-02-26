@@ -1,6 +1,7 @@
 'use strict'
 
 const { BadRequestError } = require('../core/error.response')
+const { order } = require('../models/order.model')
 const { findCartById } = require('../models/repositories/cart.repo')
 const { checkProductByServer } = require('../models/repositories/product.repo')
 const { getDiscountAmount } = require('./discount.service')
@@ -114,7 +115,7 @@ class CheckoutService {
   // order
   static async orderByUser({
     shop_order_ids_new,
-    cardId,
+    cartId,
     userId,
     user_address = {},
     user_payment = {},
@@ -135,14 +136,50 @@ class CheckoutService {
       const { productId, quantity } = products[i]
       const keyLock = await acquireLock(productId, quantity, cartId)
       acquireProduct.push(keyLock ? true : false)
-      if(keyLock) {
+      if (keyLock) {
         await releaseLock(keyLock)
       }
     }
 
     // check if co mot san pham het hang trong kho
-    if()
+    if (acquireProduct.includes(false)) {
+      throw new BadRequestError(
+        'Mot so san pham da duoc cap nhat, vui long quay lai gio hang...',
+      )
+    }
+
+    const newOrder = await order.create({
+      order_userId: userId,
+      order_checkout: checkout_order,
+      order_shipping: user_address,
+      order_payment: user_payment,
+      order_products: shop_order_ids_new,
+    })
+
+    // truong hop: neu insert thanh cong, thi remove product co trong cart
+    if (newOrder) {
+      // remove product in my cart
+    }
+    return newOrder
   }
+
+  /*
+    1 > Query orders [Users]
+  */
+  static async getOrdersByUser() {}
+
+  /*
+    1> Query Order Using Id [Users]
+  */
+  static async getOneOrderByUser() {}
+  /*
+    1> Cancel Order [Users]
+  */
+  static async cancelOrderByUser() {}
+  /*
+    1> Update Order Status [Shop | Admin]
+  */
+  static async updateOrderStatusByShop() {}
 }
 
 module.exports = CheckoutService
